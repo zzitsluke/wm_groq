@@ -24,8 +24,9 @@
 2. [Project Scope](#project-scope)
 3. [Project Details](#project-details)
 4. [Architecture](#architecture)
-5. [Responsible AI Considerations](#responsible-ai-considerations)
-6. [References](#references)
+5. [What's Next](#whats-next)
+6. [Responsible AI Considerations](#responsible-ai-considerations)
+7. [References](#references)
 
 ---
 
@@ -48,7 +49,7 @@ Specifically, the tool:
 - Acts as a **stateless AI proxy** — it does not store student data, conversation history, or personally identifiable information
 - Is deployed as a **lightweight web application** accessible via a shared URL, with no student installation required
 
-The scope explicitly excludes: user authentication, persistent cloud data, cross-course support, LMS integration, and grading functionality. These are documented as future phases but are not part of the v1.0 build.
+The scope explicitly excludes: user authentication, persistent cloud data, cross-course support, LMS integration, and grading functionality.
 
 ---
 
@@ -94,7 +95,7 @@ This tool takes instructor-provided course content and makes it interactively qu
 | Frontend | HTML / CSS / JavaScript (single file) | Zero build tooling, fully portable |
 | Backend | Python / Flask | Lightweight, minimal dependencies |
 | LLM Provider | Groq API (llama-3.3-70b-versatile) | Free tier, fast inference, OpenAI-compatible |
-| Hosting | GitHub Pages / any Python host | Static demo via GitHub Pages; Flask backend deployable to any Python host |
+| Hosting | GitHub Pages | Static demo; no server required for the live link |
 | Progress Storage | Browser localStorage | No backend database, no PII collected |
 
 ### Key Design Decisions
@@ -106,7 +107,7 @@ Groq's free tier provides sufficient token throughput for a classroom setting at
 Keeping the frontend as a single file with no build step makes the project fully portable. Any developer can open, read, and modify the interface without installing a build toolchain.
 
 **Why no user accounts in v1.0?**
-Adding authentication adds infrastructure complexity, privacy obligations, and deployment friction. For a pilot deployment, browser localStorage provides adequate progress persistence per device. Accounts are scoped to Phase 1 of the development roadmap.
+Adding authentication adds infrastructure complexity, privacy obligations, and deployment friction. For a pilot deployment, browser localStorage provides adequate progress persistence per device.
 
 ### Progress Tracking
 
@@ -130,8 +131,7 @@ This data persists across browser sessions on the same device and is never trans
 project/
 ├── app.py              # Flask backend — LLM proxy, static file serving
 ├── requirements.txt    # Python dependencies
-├── Procfile            # Production server config (gunicorn)
-├── .env                # API key (excluded from distribution)
+├── .env                # API key (excluded from repo via .gitignore)
 └── static/
     └── index.html      # Complete frontend — UI, prompts, rendering logic
 ```
@@ -145,6 +145,22 @@ project/
 6. Frontend parses and renders the structured output (JSON for quizzes/flashcards, markdown for notes)
 
 ---
+
+## What's Next
+
+### Phase 1 — Student Accounts & Cross-Device Sync
+Optional student accounts via a hosted database (e.g. Supabase), enabling progress to persist across devices and browsers. Guest mode would remain available for students who prefer not to log in.
+
+### Phase 2 — Instructor Analytics Dashboard
+A password-protected instructor view showing class-wide module engagement, per-topic mastery heatmaps, and automated alerts when a class average on a module falls below a threshold.
+
+### Phase 3 — Multi-Course & LMS Integration
+Support for multiple courses managed independently by different instructors, and LTI 1.3 integration with Canvas or Blackboard so the tool can launch directly from within a course page.
+
+### Open Concerns
+- **Rate limiting:** High concurrent usage during a class session could exhaust Groq API limits. A server-side rate limiter per student IP would mitigate this.
+- **Content drift:** As LLM providers update models, generated content quality and format may shift. Prompts should be reviewed each semester.
+- **Hallucination risk:** Generated content is grounded in instructor-provided text, which reduces but does not eliminate inaccuracies. Students should cross-reference with source materials.
 
 ---
 
@@ -175,9 +191,5 @@ LLM inference carries a non-trivial energy cost. This tool mitigates that impact
 
 ## References
 
-> ⚠️ *[Placeholder — insert at least one peer-reviewed research paper less than 3 years old from an approved source. Recommended search terms: "large language models education", "LLM tutoring systems", "AI-generated formative assessment".]*
-
-### Additional Resources
 - [Groq API Documentation](https://console.groq.com/docs)
 - [Flask Documentation](https://flask.palletsprojects.com)
----
