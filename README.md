@@ -61,7 +61,7 @@ This project is narrowly scoped to a **single-course, instructor-defined AI stud
 
 Specifically, the tool:
 - Serves **one course at a time**, with module content defined and controlled by the instructor
-- Generates **five content types** (flashcards, quizzes, notes, case studies, practice exams) from that content
+- Generates **six study modes** (flashcards, quizzes, notes, case studies, tutor chat, practice exams) from that content
 - Acts as a **stateless AI proxy** — it does not store student data, conversation history, or personally identifiable information
 - Is deployed as a **lightweight web application** accessible via a shared URL, with no student installation required
 
@@ -124,7 +124,7 @@ Groq's free tier provides sufficient token throughput for a classroom setting at
 Keeping the frontend as a single file with no build step makes the project fully portable. Any developer can open, read, and modify the interface without installing a build toolchain.
 
 **Why no user accounts in v1.0?**
-Adding authentication adds infrastructure complexity, privacy obligations, and deployment friction. For a pilot deployment, browser localStorage provides adequate progress persistence per device.
+Adding authentication adds infrastructure complexity, privacy obligations, and deployment friction. For an initial deployment, browser localStorage provides adequate progress persistence per device.
 
 ### Progress Tracking
 
@@ -272,5 +272,5 @@ LLM inference carries a non-trivial energy cost. This tool mitigates that impact
 
 ## References
 
-- [Groq API Documentation](https://console.groq.com/docs)
-- [Flask Documentation](https://flask.palletsprojects.com)
+- [Groq API Documentation](https://console.groq.com/docs) — API reference for the LLM provider used in this project, including model specs and rate limits
+- [Flask Documentation](https://flask.palletsprojects.com) — Python web framework used for the backend proxy server
