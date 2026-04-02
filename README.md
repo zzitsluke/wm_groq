@@ -15,7 +15,19 @@
 ```
 
 > **Why this matters for businesses and educators:**
-> The rise of generative AI has created an opportunity to move beyond static study materials. This tool demonstrates how organizations can embed LLM-powered interactivity directly into existing educational workflows — with no AI expertise required from the end user, at near-zero infrastructure cost.
+> Static training materials don't scale to individual learning needs — and producing custom practice content manually is expensive and time-intensive. This tool demonstrates how organizations can embed LLM-powered interactivity directly into existing educational workflows at near-zero infrastructure cost, with no AI expertise required from the end user.
+
+```
+  Traditional approach          This tool
+  ──────────────────            ──────────────────────────────────
+  Instructor writes             AI generates on demand:
+  practice questions  →         • Flashcards
+  (hours of work,               • Quizzes with scoring
+   done once,                   • Structured notes
+   same for everyone)           • Case studies
+                                • Full practice exams
+                                  — personalized, instant, free
+```
 
 ---
 
@@ -23,10 +35,12 @@
 1. [Authors](#authors)
 2. [Project Scope](#project-scope)
 3. [Project Details](#project-details)
-4. [Architecture](#architecture)
-5. [What's Next](#whats-next)
-6. [Responsible AI Considerations](#responsible-ai-considerations)
-7. [References](#references)
+4. [Agentic Design](#agentic-design)
+5. [Architecture](#architecture)
+6. [API Security](#api-security)
+7. [What's Next](#whats-next)
+8. [Responsible AI Considerations](#responsible-ai-considerations)
+9. [References](#references)
 
 ---
 
@@ -36,6 +50,8 @@
 |---|---|
 | [Author 1] | [GitHub Profile]() |
 | [Author 2] | [GitHub Profile]() |
+| [Author 3] | [GitHub Profile]() |
+| [Author 4] | [GitHub Profile]() |
 
 ---
 
@@ -86,6 +102,7 @@ This tool takes instructor-provided course content and makes it interactively qu
 | **Quiz** | Multiple-choice questions with explanations and scoring |
 | **Notes** | Structured summaries of frameworks and key ideas |
 | **Case Study** | AI-generated business scenario with discussion questions |
+| **Tutor Chat** | Multi-turn conversational Q&A grounded in course material |
 | **Practice Exam** | Multi-module timed exam with configurable question count |
 
 ### Technical Stack
@@ -95,7 +112,7 @@ This tool takes instructor-provided course content and makes it interactively qu
 | Frontend | HTML / CSS / JavaScript (single file) | Zero build tooling, fully portable |
 | Backend | Python / Flask | Lightweight, minimal dependencies |
 | LLM Provider | Groq API (llama-3.3-70b-versatile) | Free tier, fast inference, OpenAI-compatible |
-| Hosting | GitHub Pages | Static demo; no server required for the live link |
+| Hosting | GitHub Pages (demo) / Python host (full) | Static demo requires no server; full backend deployable to any Python host |
 | Progress Storage | Browser localStorage | No backend database, no PII collected |
 
 ### Key Design Decisions
@@ -125,6 +142,41 @@ This data persists across browser sessions on the same device and is never trans
 
 ---
 
+## Agentic Design
+
+This application incorporates several agentic AI design patterns — behaviors where the system autonomously makes decisions, adapts to context, and takes multi-step actions rather than simply passing a fixed prompt to an LLM.
+
+### Autonomous Model Routing
+The backend selects which LLM to invoke based on the complexity of the requested task. Lightweight study modes (flashcards, notes, tutor chat) use `llama-3.1-8b-instant` for speed; complex generation tasks (case studies, practice exams) are automatically routed to `llama-3.3-70b-versatile` for higher quality output. This routing logic runs without any user input.
+
+```
+User request
+    │
+    ├── flashcard / quiz / notes / tutor  ──▶  llama-3.1-8b-instant  (fast)
+    │
+    └── case study / exam                 ──▶  llama-3.3-70b-versatile  (capable)
+```
+
+### Dynamic Prompt Construction
+Rather than using a static template, the system constructs each prompt at runtime by embedding the full relevant course module content, the selected study mode, and (in tutor mode) the live conversation history. The prompt is never the same twice.
+
+### Multi-Turn Conversational Memory (Tutor Mode)
+The Tutor mode maintains a rolling conversation window across multiple exchanges. The system autonomously manages context — prepending the course material as a system context on the first message, then appending subsequent turns — enabling coherent multi-step tutoring sessions without the student managing session state.
+
+```
+Turn 1:  [course material + student question]  →  AI answer
+Turn 2:  [turn 1 context + follow-up]          →  AI answer
+Turn N:  [sliding window of last 4 turns]      →  AI answer
+```
+
+### Automatic Output Repair
+When the LLM returns malformed JSON (a common failure mode for structured generation tasks like quizzes and flashcards), the application automatically attempts to parse and repair the output before surfacing an error to the user. This self-correction loop reduces user-visible failures without requiring a manual retry.
+
+### Retry Logic with Exponential Backoff
+The backend automatically retries failed Groq API connections up to 3 times with exponential backoff, recovering from transient network errors without surfacing them to the student.
+
+---
+
 ## Architecture
 
 ```
@@ -143,6 +195,35 @@ project/
 4. Flask backend validates the request, injects the Groq API key, and forwards to Groq
 5. Groq returns a completion; Flask translates it to the Anthropic response shape
 6. Frontend parses and renders the structured output (JSON for quizzes/flashcards, markdown for notes)
+
+---
+
+## API Security
+
+API key security is handled differently depending on the deployment context.
+
+### Flask Deployment (full backend)
+The Groq API key is stored in a `.env` file on the server and loaded as an environment variable at runtime. It is **never included in the codebase**, never committed to git (enforced by `.gitignore`), and never transmitted to the browser. All API calls are made server-side: the browser sends a request to `/api/chat` on the Flask server, which injects the key and forwards to Groq. The student's browser never sees the key.
+
+```
+Browser  ──▶  /api/chat (Flask)  ──[key injected here]──▶  Groq API
+              ↑
+              key lives only here, in .env on the server
+```
+
+### GitHub Pages Demo (static frontend)
+The live demo runs entirely in the browser with no backend server. In this deployment, **there is no shared API key** — each user must supply their own free Groq API key when they first open the app. The key is:
+- Entered at runtime via a prompt modal (never hardcoded in source)
+- Stored only in the user's own browser `localStorage`
+- Sent directly from the user's browser to Groq over HTTPS
+- Never stored on any server, never visible in the GitHub source code
+
+The tradeoff is that a user-supplied key is technically visible in browser DevTools network traffic while in use. For a free-tier key with Groq's built-in rate limits, this risk is low — but users should treat their key as they would any credential and rotate it if they believe it has been compromised.
+
+### What is never in this repo
+- No API keys, tokens, or secrets of any kind
+- No `.env` file (blocked by `.gitignore`)
+- No user data or student information
 
 ---
 
@@ -174,7 +255,7 @@ Large language models can generate plausible but factually incorrect content. Al
 
 ### Data Privacy
 - No student data is collected, transmitted, or stored server-side
-- The API key is held exclusively on the server and never exposed to the browser
+- In the full Flask deployment, the API key never leaves the server
 - Browser localStorage data never leaves the student's device
 - The tool does not log or retain student queries or AI responses
 
