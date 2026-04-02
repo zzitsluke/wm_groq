@@ -24,9 +24,8 @@
 2. [Project Scope](#project-scope)
 3. [Project Details](#project-details)
 4. [Architecture](#architecture)
-5. [What's Next](#whats-next)
-6. [Responsible AI Considerations](#responsible-ai-considerations)
-7. [References](#references)
+5. [Responsible AI Considerations](#responsible-ai-considerations)
+6. [References](#references)
 
 ---
 
@@ -95,7 +94,7 @@ This tool takes instructor-provided course content and makes it interactively qu
 | Frontend | HTML / CSS / JavaScript (single file) | Zero build tooling, fully portable |
 | Backend | Python / Flask | Lightweight, minimal dependencies |
 | LLM Provider | Groq API (llama-3.3-70b-versatile) | Free tier, fast inference, OpenAI-compatible |
-| Hosting | PythonAnywhere | No GitHub required, instructor-owned deployment |
+| Hosting | GitHub Pages / any Python host | Static demo via GitHub Pages; Flask backend deployable to any Python host |
 | Progress Storage | Browser localStorage | No backend database, no PII collected |
 
 ### Key Design Decisions
@@ -147,24 +146,6 @@ project/
 
 ---
 
-## What's Next
-
-The following phases are documented in the project's development roadmap:
-
-### Phase 1 — Student Accounts & Cross-Device Sync
-Optional student accounts via Supabase (free hosted database), enabling progress to persist across devices and browsers. Guest mode would remain available for students who prefer not to log in.
-
-### Phase 2 — Instructor Analytics Dashboard
-A password-protected instructor view showing class-wide module engagement, per-topic mastery heatmaps, and automated alerts when class average on a module falls below a threshold. Requires Phase 1.
-
-### Phase 3 — LMS Integration & Multi-Course Architecture
-Full LTI 1.3 integration with Canvas and Blackboard, enabling the tool to launch directly from within a course page. Multi-course support would allow each instructor to manage their own content without developer involvement. Requires coordination with institutional IT.
-
-### Open Concerns
-- **Rate limiting:** No per-student server-side rate limiting exists in v1.0 (the backend does retry automatically on connection errors, up to 3 attempts). High concurrent usage during a class session could exhaust Groq API limits — mitigated by setting a Groq spend limit and adding Flask-Limiter (see roadmap Next Steps).
-- **Content drift:** As LLM providers update models, generated content quality and format may shift. Prompt engineering should be revisited each semester.
-- **Scalability:** PythonAnywhere runs 3 WSGI web workers on the Developer plan — appropriate for one course but would require migration at institutional scale (see Roadmap Phase 3). Note: the `Procfile`'s gunicorn config is for Render/Railway, not PythonAnywhere.
-
 ---
 
 ## Responsible AI Considerations
@@ -199,9 +180,4 @@ LLM inference carries a non-trivial energy cost. This tool mitigates that impact
 ### Additional Resources
 - [Groq API Documentation](https://console.groq.com/docs)
 - [Flask Documentation](https://flask.palletsprojects.com)
-- [Supabase Documentation](https://supabase.com/docs) *(referenced in development roadmap)*
-- [PyLTI1p3 — LTI 1.3 for Python](https://github.com/dmitry-viskov/pylti1.3) *(referenced in development roadmap)*
-
 ---
-
-*For questions about this codebase or handoff context, contact: kovatsluke@gmail.com*
