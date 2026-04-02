@@ -25,6 +25,7 @@
   (hours of work,               • Quizzes with scoring
    done once,                   • Structured notes
    same for everyone)           • Case studies
+                                • Tutor chat (multi-turn)
                                 • Full practice exams
                                   — personalized, instant, free
 ```
@@ -62,7 +63,7 @@ This project is narrowly scoped to a **single-course, instructor-defined AI stud
 Specifically, the tool:
 - Serves **one course at a time**, with module content defined and controlled by the instructor
 - Generates **six study modes** (flashcards, quizzes, notes, case studies, tutor chat, practice exams) from that content
-- Acts as a **stateless AI proxy** — it does not store student data, conversation history, or personally identifiable information
+- Uses a **server-stateless architecture** — the backend stores nothing; all session state lives in the student's own browser
 - Is deployed as a **lightweight web application** accessible via a shared URL, with no student installation required
 
 The scope explicitly excludes: user authentication, persistent cloud data, cross-course support, LMS integration, and grading functionality.
