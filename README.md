@@ -1,6 +1,8 @@
 # AI-Powered Study Suite
 ### An intelligent, course-specific study tool built on large language models
 
+**[Live Demo](https://zzitsluke.github.io/wm_groq)** — bring your own free [Groq API key](https://console.groq.com)
+
 ---
 
 ```
