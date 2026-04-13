@@ -47,12 +47,12 @@
 
 ## Authors
 
-| Name | GitHub |
-|---|---|
-| [Author 1] | [GitHub Profile]() |
-| [Author 2] | [GitHub Profile]() |
-| [Author 3] | [GitHub Profile]() |
-| [Author 4] | [GitHub Profile]() |
+| Name |
+|---|
+| Luke Kovats |
+| Dean Rarick |
+| Brandon Ward |
+| Jessie Lin |
 
 ---
 
