@@ -2571,16 +2571,17 @@ function renderCaseStudy(jsonText) {
     const data = repairJSON(jsonText);
     if (!data || !data.scenario) throw new Error('Could not parse response structure');
 
-    const paragraphs = data.scenario.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('');
+    const paragraphs = data.scenario.split('\n').filter(p => p.trim()).map(p => `<p>${escapeHtml(p)}</p>`).join('');
 
     const questionsHTML = data.questions.map((q, i) => {
-      const safeModelAnswer = q.modelAnswer.replace(/'/g, "&#39;").replace(/"/g, "&quot;");
-      const safeQ = q.q.replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+      const safeModelAnswer = escapeHtml(q.modelAnswer);
+      const safeQ = escapeHtml(q.q);
+      const safeConcept = escapeHtml(q.concept);
       return `
       <div class="case-question-block">
-        <div class="case-q-num">Discussion Question ${i + 1} · <em>${q.concept}</em></div>
-        <div class="case-q-text">${q.q}</div>
-        <textarea class="case-answer-input" id="caseAnswer-${i}" placeholder="Type your analysis here… Apply the frameworks from ${selectedTopic} to this specific situation."></textarea>
+        <div class="case-q-num">Discussion Question ${i + 1} · <em>${safeConcept}</em></div>
+        <div class="case-q-text">${safeQ}</div>
+        <textarea class="case-answer-input" id="caseAnswer-${i}" placeholder="Type your analysis here… Apply the frameworks from ${escapeHtml(selectedTopic)} to this specific situation."></textarea>
         <button class="case-submit-btn" id="caseSubmit-${i}"
           data-idx="${i}"
           data-model="${safeModelAnswer}"
@@ -2597,9 +2598,9 @@ function renderCaseStudy(jsonText) {
 
     outputBody.innerHTML = `
       <div class="case-study-header">
-        <div class="case-study-tag">📍 ${document.getElementById('caseIndustry').value} · ${document.getElementById('caseDifficulty').value}</div>
-        <h2>${data.title}</h2>
-        <p>${data.company} &nbsp;·&nbsp; Protagonist: ${data.protagonist}</p>
+        <div class="case-study-tag">📍 ${escapeHtml(document.getElementById('caseIndustry').value)} · ${escapeHtml(document.getElementById('caseDifficulty').value)}</div>
+        <h2>${escapeHtml(data.title)}</h2>
+        <p>${escapeHtml(data.company)} &nbsp;·&nbsp; Protagonist: ${escapeHtml(data.protagonist)}</p>
       </div>
       <div class="case-body-text">${paragraphs}</div>
       <hr class="case-divider">
@@ -3390,6 +3391,15 @@ function initGuide() {
 }
 
 // ── GitHub Pages: direct Groq API ────────────────────────────────────────────
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 function showApiKeyModal() {
   document.getElementById('apikeyOverlay').classList.remove('hidden');
