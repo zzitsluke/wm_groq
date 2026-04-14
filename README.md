@@ -53,10 +53,10 @@
 
 | Name |
 |---|
-| Luke Kovats |
-| Dean Rarick |
-| Brandon Ward |
-| Jessie Lin |
+| [Luke Kovats](https://github.com/zzitsluke) |
+| [Dean Rarick](https://github.com/djrarick) |
+| [Brandon Ward](https://github.com/brandonw206) |
+| [Jessie Lin](https://github.com/jiexilin058) |
 
 ---
 
