@@ -16,6 +16,8 @@
 └─────────────────────────────────────────────────────────────────┘
 ```
 
+![W&M Strategic Marketing Study Suite — dashboard header](assets/screenshot-hero.png)
+
 > **Why this matters for businesses and educators:**
 > Static training materials don't scale to individual learning needs — and producing custom practice content manually is expensive and time-intensive. This tool demonstrates how organizations can embed LLM-powered interactivity directly into existing educational workflows at near-zero infrastructure cost, with no AI expertise required from the end user.
 
@@ -99,6 +101,8 @@ This tool takes instructor-provided course content and makes it interactively qu
 
 ### Study Modes
 
+![Six study mode cards — Flashcards, Interactive Quiz, Case Study, Tutor Chat, Exam Prep, Study Notes](assets/screenshot-modes.png)
+
 | Mode | Description |
 |---|---|
 | **Flashcards** | Key concept pairs generated from module content |
@@ -162,6 +166,8 @@ User request
 
 ### Dynamic Prompt Construction
 Rather than using a static template, the system constructs each prompt at runtime by embedding the full relevant course module content, the selected study mode, and (in tutor mode) the live conversation history. The prompt is never the same twice.
+
+![In-app prompt guidance panel — recommended study strategies per mode](assets/screenshot-tips.png)
 
 ### Multi-Turn Conversational Memory (Tutor Mode)
 The Tutor mode maintains a rolling conversation window across multiple exchanges. The system autonomously manages context — prepending the course material as a system context on the first message, then appending subsequent turns — enabling coherent multi-step tutoring sessions without the student managing session state.
