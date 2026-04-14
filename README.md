@@ -44,8 +44,9 @@
 5. [Architecture](#architecture)
 6. [API Security](#api-security)
 7. [What's Next](#whats-next)
-8. [Responsible AI Considerations](#responsible-ai-considerations)
-9. [References](#references)
+8. [Project Management](#project-management)
+9. [Responsible AI Considerations](#responsible-ai-considerations)
+10. [References](#references)
 
 ---
 
@@ -251,6 +252,16 @@ Support for multiple courses managed independently by different instructors, and
 - **Rate limiting:** High concurrent usage during a class session could exhaust Groq API limits. A server-side rate limiter per student IP would mitigate this.
 - **Content drift:** As LLM providers update models, generated content quality and format may shift. Prompts should be reviewed each semester.
 - **Hallucination risk:** Generated content is grounded in instructor-provided text, which reduces but does not eliminate inaccuracies. Students should cross-reference with source materials.
+
+---
+
+## Project Management
+
+The team tracked all work throughout the semester using a Jira kanban board, organized into four columns: **Completed**, **In Progress**, **Need To Do**, and **Stretch Features**.
+
+![Jira kanban board showing sprint history, active tasks, and future work](assets/screenshot-kanban.png)
+
+Key completed milestones tracked on the board include implementing memory logic, resolving model/token selection, building the quiz and cheat sheet/study guide features, ensuring full course material ingestion, and two client check-in meetings. Active and upcoming work includes UI improvements, multi-student usability, mobile responsiveness, and a professor vs. student role distinction.
 
 ---
 
