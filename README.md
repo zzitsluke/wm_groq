@@ -155,7 +155,7 @@ This data persists across browser sessions on the same device and is never trans
 This application incorporates several agentic AI design patterns — behaviors where the system autonomously makes decisions, adapts to context, and takes multi-step actions rather than simply passing a fixed prompt to an LLM.
 
 ### Autonomous Model Routing
-The backend selects which LLM to invoke based on the complexity of the requested task. Lightweight study modes (flashcards, quizzes, notes, tutor chat) use `llama-3.1-8b-instant` for speed; complex generation tasks (case studies, practice exams) are automatically routed to `llama-3.3-70b-versatile` for higher quality output. This routing logic runs without any user input.
+The frontend selects which LLM to invoke based on the complexity of the requested task, before the API call is made. Lightweight study modes (flashcards, quizzes, notes, tutor chat) use `llama-3.1-8b-instant` for speed; complex generation tasks (case studies, practice exams) are automatically routed to `llama-3.3-70b-versatile` for higher quality output. This routing logic runs without any user input.
 
 ```
 User request
@@ -176,7 +176,7 @@ The Tutor mode maintains a rolling conversation window across multiple exchanges
 ```
 Turn 1:  [course material + student question]  →  AI answer
 Turn 2:  [turn 1 context + follow-up]          →  AI answer
-Turn N:  [sliding window of last 4 turns]      →  AI answer
+Turn N:  [first turn (anchored) + last 4 turns]  →  AI answer
 ```
 
 ### Automatic Output Repair
