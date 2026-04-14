@@ -275,5 +275,19 @@ LLM inference carries a non-trivial energy cost. This tool mitigates that impact
 
 ## References
 
+### Research Foundation
+
+**Gómez Niño, J. R., Arias Delgado, L. P., Chiappe, A., & Ortega González, E. (2024).** *Gamifying Learning with AI: A Pathway to 21st-Century Skills.* Journal of Research in Childhood Education, pp. 735–750.
+[https://doi.org/10.1080/02568543.2024.2421974](https://www.tandfonline.com/doi/full/10.1080/02568543.2024.2421974)
+
+This systematic review (175 articles, Scopus-sourced) directly informed several design decisions in this project:
+
+- **Multi-mode active learning** — The paper finds that gamified learning across varied formats (quizzes, flashcards, case studies, collaborative challenges) more effectively develops critical thinking, creativity, and communication than passive content delivery. This grounded our choice to offer six distinct study modes rather than a single chat interface.
+- **AI as tutor, not replacement** — The review distinguishes between AI as a knowledge transmitter versus AI as a learning facilitator. Our Tutor Chat mode is deliberately conversational and Socratic — it grounds responses in course material and guides reasoning rather than just surfacing answers, aligning with the paper's conclusion that AI should *enhance* rather than replace the teacher's facilitative role.
+- **Gamification mechanics for motivation** — The paper documents that progress indicators (badges, streaks, mastery scores) sustain student engagement without trivializing learning, provided they remain tied to real skill development. This validated our implementation of streak tracking, per-module mastery percentages, and pinned content — lightweight gamification that reinforces return visits and self-assessment.
+- **Personalized, on-demand content** — The review highlights AI's capacity to adapt learning material to individual student needs in real time as a key advantage over static resources. Dynamic prompt construction in this tool — embedding the specific module content and study mode selected by the student — directly reflects this principle.
+
+### Technical Documentation
+
 - [Groq API Documentation](https://console.groq.com/docs) — API reference for the LLM provider used in this project, including model specs and rate limits
 - [Flask Documentation](https://flask.palletsprojects.com) — Python web framework used for the backend proxy server
