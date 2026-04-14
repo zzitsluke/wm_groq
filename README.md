@@ -56,7 +56,7 @@
 |---|
 | [Luke Kovats](https://github.com/zzitsluke) |
 | [Dean Rarick](https://github.com/djrarick) |
-| [Brandon Ward](https://github.com/brandonw206) |
+| [Brandon Ward](https://github.com/brandonw203) |
 | [Jessie Lin](https://github.com/jiexilin058) |
 
 ---
